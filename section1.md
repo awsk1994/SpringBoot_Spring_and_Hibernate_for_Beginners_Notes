@@ -351,4 +351,53 @@ This generated password is for development use only. Your security configuration
 ```
 
  - You can override by changing properties
+
+
+## 25. Run Spring Boot apps from the command line
+
+ - Since we are using Spring Boot, the server is embedded in the JAR
+ - two options:
+     - option 1: use `java -jar XXX.jar`
+     - option 2: use spring boot maven plugin
+         - `./mvnw package; ./mvnw spring-boot:run`
+
+
+ - Development Process
+     - 1. Exit the IDE
+     - 2. Package the app using `mvnw package`
+     - 3a. (option A) Run app using `java -jar`
+     - 3b. (option B) Run app using Spring Boot Maven plugin, `mvnw spring-boot:run`
+
+## 27. Injecting Custom Application Properties
+
+ - By default, Spring Boot reads information from a standard property file (application.properties)
+ - You can define ANY custom property in this file
+     - Your Spring Boot app can access properties using `@Value`
+
+ - Development Process
+     - 1. Define custom properties in application.properties
+```
+# in application.properties
+coach.name=Micky Mouse
+team.name=The Mouse Club
+```
  - 
+     - 2. Inject properties into Spring Boot application using `@Value`
+
+```java
+import org.springframework.beans.factory.annotation.Value;
+...
+
+@RestController
+public class FunRestController {
+    // Inject properties for coach.name and team.name
+    @Value("${coach.name}")
+    private String coachName;
+    @Value("${team.name}")
+    private String teamName;
+
+    ...
+}
+
+```
+
