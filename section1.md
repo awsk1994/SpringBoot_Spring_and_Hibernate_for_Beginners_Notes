@@ -86,3 +86,67 @@ public class FunRestController {
 ```
  - Open localhost:8080 to find "Hello World"
 
+## 8. Spring Framework Overview
+
+ - Goal of Spring
+     - Lightweight development with Java POJOs (Plain-Old-Java-Objects)
+     - Dependency Injection to promote loose coupling
+     - Minimize boilerplate Java code
+
+ - Key Concepts
+    - Core Framework (bean lifecycle/management)
+    - Infrastructure (AOP)
+    - Data Access Layer (DAL: JDBC, orm, Hibernate)
+    - Web Layer (Servlet, WebSocket, Web)
+    - Test Layer (Unit, Mock, Integration)
+
+## 11. What is Maven?
+ - Project Management Tool
+ - Without Maven, developer will need to download each dependency jar one by one
+
+ - Standard Directory Structure
+
+|  Directory   | Description  |
+|  ----  | ----  |
+| src/main/java  | Your Java source code |
+| src/main/resources  | Property/config files used by your app |
+| src/main/webapp  | JSP files and web config files; other web assets (images, css, js, etc) |
+| src/test  | Unit testing code and properties |
+| target  | destination directory for compiled code. Automatically created by Maven |
+
+
+ - Maven Key Concepts
+     - pom.xml (Project Object Model)
+         - configuration file for your project ('shopping cart' for Maven)
+     - File Structure
+         - 1. Project Meta Data (Project name, verion, output file (JAR, WAR).etc)
+
+
+|  Name   | Description  |
+|  ----  | ----  |
+| Group ID  | Name of company/group/organization; convention: com.luv2code |
+| Artifact ID  | Name for this project: mycoolapp |
+| Version (optional, but highly recommend to include) |  |
+
+```xml
+<groupId>com.marsCoder.springboot.demo</groupId>
+<artifactId>mycoolapp</artifactId>
+<version>0.0.1-SNAPSHOT</version>
+<name>mycoolapp</name>
+<description>Demo project for Spring Boot</description>
+<properties>
+    <java.version>17</java.version>
+</properties>
+```
+
+
+ - 
+     - 
+         - 
+            2. Dependencies
+            3. Plug-ins (Additional custom tasks to run: generate JUnit test reports.etc)
+
+
+ - How to find Dependencies?
+     - http://search.maven.org
+
