@@ -401,3 +401,56 @@ public class FunRestController {
 
 ```
 
+## 29. Configuring the Spring Boot Server
+
+ - Spring Boot can be configured in the `application.properties` file
+     - including areas of server port, context path.etc
+ - For more details, go to https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties
+
+  - Core Properties
+```
+# Log Levels severity mapping
+logging.level.org.springframework=DEBUG
+logging.level.org.hibernate=TRACE
+
+# Log filename
+logging.file.name=my-crazy-stuff.log
+logging.file.path=c:/myapps/demo
+```
+
+ - Web Properties
+```
+# HTTP server port
+server.port=7070
+
+# Context path of the application
+server.servlet.context-path=/my-silly-app
+
+# The above config will change the path to localhost:7070/my-silly-app
+
+# Default HTTP session timeout
+server.servlet.session.timeout=15m
+```
+
+ - Actuator Properties
+ - Security Properties
+```
+# Default user name
+spring.security.user.name=admin
+
+# Password for default user
+spring.security.user.password=topsecret
+```
+
+- Data Properties
+```
+# JDBC url of the database
+spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce
+
+# Login username of the database
+spring.datasource.username=scott
+
+# Login password of the database
+spring.datasource.password=tiger
+```
+
