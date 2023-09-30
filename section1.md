@@ -323,3 +323,32 @@ info.app.version=1.0.0
      - 2. view actuator endpoints for: /health
      - 3. Edit application.properties to customize /info
 
+## 18. Spring Boot Actuator - Securing Endpoints
+ - You may NOT want expose all of the actuator endpoint information
+ - Simply add Spring Security to project and endpoints are secured
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+ - Now, when you access /actuator/beans, you'll prompted to login
+
+<img src="./public/screenshot/actuator_login.png"/>
+
+ - 
+     - Default Username is "user"
+     - Password is printed in the logs
+
+```
+2023-10-01T01:07:50.350+08:00  WARN 125768 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d39115a2-ebff-469b-8c9e-ef6a93f97ef2
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+```
+
+ - You can override by changing properties
+ - 
