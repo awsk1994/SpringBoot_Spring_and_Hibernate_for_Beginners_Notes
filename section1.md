@@ -192,3 +192,80 @@ private String coachName;
      - Spring will load templates from "/templates" directory
 
 
+## 16. Spring Boot Starters
+
+ - What is spring boot starters?
+     - a curated list of Maven Dependencies
+     - a collection of dependencies grouped together
+     - tested and verified by the Spring Development team
+     - Makes it much easier for the developer to get started with Spring
+     - Reduces the amount of Maven configuration
+
+ - Example: spring-boot-starter-web
+     - contains spring-web, spring-webmvc, hibernate-validator, json, tomcat.etc    
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+ - When you are creating a starter initializr, you can add dependency here.
+ <img src="./public/screenshot/spring_initializr_add_dependencies.png"/>
+
+|  Name   | Description  |
+|  ----  | ----  |
+| spring-boot-starter-web  | Build web apps, including validation, REST. Uses Tomcat as default embedded server |
+| spring-boot-starter-security  | Adding Spring Security support |
+| spring-boot-starter-data-jpa | Spring Database support with JPA and Hibernate |
+| spring-boot-starter-thymeleaf |  |
+
+ -  
+     - For more info on starters, visit https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using.build-systems.starters
+
+
+ - how do you know what is in the starters?
+     - Most IDEs have a Dependency Management/View Feature
+
+## 17. Spring Boot Starter Parent
+
+ - Spring Boot provides a "starter parent"
+ - This is a special starter that provides Maven defaults
+```xml
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.1.4</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+```
+
+ - includes Default compiler level, UTF-8 source encoding.etc.
+     - To override a default, set as a property
+```xml
+<properties>
+    <java.version>17</java.version>
+</properties>
+```
+
+ - All spring-starter-* doesn't have version. This is because it inherits from starter parent
+
+
+## 18. Spring Boot Dev Tools
+
+ - spring-boot-dev-tools
+     - automatically restarts your application when your code is updated
+     - no need to add additional code, just add dependecy to pom.xml
+     - IntelliJ Community Edition doesn't support DevTools by default
+         -  Preferences > Build, Exection, Deployment > Compiler
+             - check box: Build project automatically
+         - Preferences > Advanced settings
+             - check box: allow auto-make to ...
+
+ - Development Process
+     - 1. Apply IntelliJ Configurations
+     - 2. Edit pom.xml and add spring-boot-devtools
+     - 3. Add new REST endpoint to our app
+     - 4. Verify the app is automatically updated
+
