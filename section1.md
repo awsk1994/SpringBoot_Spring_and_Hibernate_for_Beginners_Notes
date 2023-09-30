@@ -269,3 +269,57 @@ private String coachName;
      - 3. Add new REST endpoint to our app
      - 4. Verify the app is automatically updated
 
+## 17. Spring Boot Actuators
+ - What does Spring Boot Actuators do?
+     - Exposes endpoints to monitor and manage your application
+     - actuator-related REST endpoints are automatically added to your application (no additional code required)
+
+ - Adding dependency to your POM
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+ - Endpoints are prefixed "/actuator"
+     - "/actuator/health": checks health information about your application
+         - if you go to localhost:8080/actuator/health, you'll get the status information (whether it's up or not)
+         - by default, only this endpoint is exposed
+     - "/actuator/info": checks info about app
+         - To enable this endpoint, you need to set properties (src/main/resources/application.properties)
+```
+management.endpoints.web.exposure.include=health,info
+management.info.env.enabled=true
+
+# To expose ALL endpoints, you can do:
+# management.endpoints.web.exposure.include=*
+```
+
+ -  
+     -
+         - Even if you go to localhost:8080/actuator/info now, you'll get a "{}" (which is not useful)
+         - you'll need to add info.XXX properties to set what you want to show
+
+```
+# Example
+info.app.name=My Super Cool App
+info.app.description=A crazy and fun application
+info.app.version=1.0.0
+```
+
+ - Other autuator endpoints
+
+|  Name   | Description  |
+|  ----  | ----  |
+| /auditevents  | Audit events for your application |
+| /beans  | List of all beans registered in the Spring application context |
+| /mappings  | List of all @RequestMapping paths |
+
+ - For more details, go to https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
+
+ - Development Process
+     - 1. Edit pom.xml and add spring-boot-starter-actuator
+     - 2. view actuator endpoints for: /health
+     - 3. Edit application.properties to customize /info
+
