@@ -150,3 +150,45 @@ public class FunRestController {
  - How to find Dependencies?
      - http://search.maven.org
 
+## 14. Spring Boot Project Files
+
+ - Maven Wrapper Files
+     - mvnw allows you to run a maven project
+     - mvnw.cmd is for windows
+     - mvnw.sh is for linux
+
+ - Application Properties
+     - By default, Spring Boot will load properties from src/main/resources/application.properties
+     - this is empty at the beginning
+     - can add spring boot or your own properties, such as:
+```xml
+# Spring boot properties
+server.port=8585
+
+# Your own custom properties
+coach.name=Mickey Mouse
+```
+
+ - 
+     - Once we do this, we can use annotations to define variables.
+```xml
+@Value("${coach.name}")
+private String coachName;
+```
+
+ - Static Content
+     - located in src/main/resources/static
+     - By default, spring boot will load static resources from /static directory
+     - Examples: HTML files, css, javascript, images.etc
+
+ - WARNING: DO NOT USE src/main/webapp directory, unless you are exporting it as WAR
+
+ - Templates
+     - Spring Boot includes auto-configuration for following template engines:
+         - FreeMarker
+         - ThymeLeaf
+         - Mustache
+
+     - Spring will load templates from "/templates" directory
+
+
