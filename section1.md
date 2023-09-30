@@ -62,6 +62,27 @@ Incase you face some issues, can try adding snakeyaml@2.0 to dependencies
     <artifactId>snakeyaml</artifactId>
     <version>2.0</version>
 </dependency>
-
 ```
+
+
+You will find one of the log message to be:
+```
+2023-09-30T21:33:59.475+08:00  INFO 106148 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+```
+
+If you head over to localhost:8080, you'll realize that the server does exist.
+
+## 7. Spring Boot - Rest Controller
+ - Create Package "rest", and within it a class "FunRestController"
+ ```java
+ @RestController
+public class FunRestController {
+    // expose "/" that return "Hello World"
+    @GetMapping("/")
+    public String sayHello() {
+        return "Hello World";
+    }
+}
+```
+ - Open localhost:8080 to find "Hello World"
 
