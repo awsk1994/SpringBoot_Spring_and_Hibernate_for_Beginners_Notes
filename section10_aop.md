@@ -99,12 +99,12 @@ public void addAccount(Account theAccount, String userID) {
         * Regarding performance: run-time weaving is the slowest
 
 # Two Leading frameworks: Spring AOP and AspectJ
-    * Spring AOP
-        * Spring provided
-        * uses run-time weaving of aspects
-    * AspectJ 
-        * original AOP framework, released in 2001
-        * Provides complete support for AOP
-        * Rich support for
-            * join-points: method-level, constructor, field
-            * code weaving: compile-time, post-compile-time, load-time
+* Spring AOP
+    * Spring provided
+    * uses run-time weaving of aspects
+* AspectJ 
+    * original AOP framework, released in 2001
+    * Provides complete support for AOP
+    * Rich support for
+        * join-points: method-level, constructor, field
+        * code weaving: compile-time, post-compile-time, load-time
