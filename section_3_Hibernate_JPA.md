@@ -2,7 +2,7 @@
 
 ## What is Hibernate?
 * A framework for persisting/saving Java objects in a database
-* https://hibernate.org/orm/
+  * https://hibernate.org/orm/
 
 <img src="./public/screenshot/3_hibernate_jpa/1.png"/>
 
@@ -18,6 +18,10 @@
 
 ## What is JPA?
 * Jakarta Persistence API (previously known as Java Persistence API)
+  * Is a standard API for Object-to-Relational Mapping (ORM)
+  * Only a **specification**
+    * defines a set of interfaces
+    * requires an implementation to be usable
 
 * vendor implementations
     * Hibernate
@@ -175,55 +179,59 @@ public class Student {
     // define fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="first_name")
-    private int firstName;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name="last_name")
-    private int lastName;
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column(name="email")
-    private int email;
+    @Column(name = "email")
+    private String email;
+
+    // define constructors
+    public Student(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+    // define getters/setters
     ...
 }
 ```
 
 ## Data Access Object (DAO)
 
-* DAO is a common design pattern
-```
-[APP] <--> [student DAO] <--> [JPA EntityManager] <--> [DB]
-```
+* DAO is a common design pattern - Responsible for interfacing with the database
+* In short: 
+<img src="./public/screenshot/3_hibernate_jpa/5.png"/>
+  * Typical methods: save, findByID, findAll, findByLastName, update, delete, deleteAll.etc
 
-* Typical methods: save, findByID, findAll, findByLastName, update, delete, deleteAll.etc
-* JPA EntityManager is automatically created by Spring Boot
+### Relationship with JPA
 
+* Note that JPA EntityManager and Data Source is automatically created by Spring Boot (Based on the file: application .properties (JDBC URL, user id, password.etc))
 * We can autowire/inject the JPA Entity Manager into our student DAO
 
-* @transactional
-    * Automatically begin and end transaction for your JPA code
-* @Repository
-    * Spring will automatically register the DAO implementation (thanks to component scanning)
-    * provides translation of any JDBC-related exceptions
-    z`
+<img src="./public/screenshot/3_hibernate_jpa/6.png"/>
 
-* Steps
-    * 1. Define DAO interface
+## Steps
+### 1. Define DAO interface
 ```java
 public interface StudentDAO {
     void save(Student theStudent);
 }
 ```
-*
-    * 2. Define DAO implementation
-        * Inject the entity manager
+
+### 2. Define DAO implementation
+* Inject the entity manager
 
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Repository
+@Repository // explained below
 public class StudentDAOImpl implements StudentDAO {
     private EntityManager entityManager;
 
@@ -233,12 +241,56 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    @Transactional  // transactional annotation explained earlier
+    @Transactional // explained below
     public void save(Student theStudent) {
         entityManager.persist(theStudent);
     }
 }
 ```
 
-    * 3. Update main app
+#### Special Annotations
+**@Transactional**
+  * Automatically begin and end transaction for your JPA code
+  * (from spring framework)
 
+**@Repository**
+  * Spring will automatically register the DAO implementation (thanks to component scanning)
+  * provides translation of any JDBC-related exceptions
+  * sub-annotation of @components
+<img src="./public/screenshot/3_hibernate_jpa/7.png"/>
+
+
+
+### 3. Update main app
+
+```java
+@SpringBootApplication
+public class HibernateJpaDemoApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(HibernateJpaDemoApplication.class, args);
+	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(StudentDAO studentDao) {
+		return runner -> {
+			createStudent(studentDao);
+		};
+	}
+
+	private void createStudent(StudentDAO studentDao) {
+		// create the student object
+		System.out.println("Creating new student object...");
+		Student tmpStudent = new Student("PD", "Paul", "Doe", "paul@luv");
+
+		// save the student object
+		System.out.println("Saving the student...");
+		studentDao.save(tmpStudent);
+
+		// display id of the saved student
+		System.out.println("Saved student. Generated id: " + tmpStudent.getId());
+	}
+}
+```
+
+### Run Main
+* If you run main, and check the database, you should see a new row containing "Paul Doe".
