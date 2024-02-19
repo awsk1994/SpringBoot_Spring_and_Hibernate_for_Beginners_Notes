@@ -54,3 +54,7 @@
 
 3. Reference Values from Property File
 <img src="./public/screenshot/8_ioc_java_code/14.png"/>
+
+# Good External Sources
+
+https://www.geeksforgeeks.org/spring-configuration-annotation-with-example/

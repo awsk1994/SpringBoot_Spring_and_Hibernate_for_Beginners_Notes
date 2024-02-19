@@ -69,7 +69,7 @@ List<Student> students = theQuery.getResultList();  // Returns a list of Student
     * from JPA
 * Based on configs, Spring Boot will automatically create the beans: DataSource, EntityManager 
 
-## Steps
+## Steps from high-level overview
 
 * Step 1: Set up Dev Environment
     * https://dev.mysql.com/downloads/mysql/
@@ -109,3 +109,136 @@ spring.datasource.password=password
 ```
 
 * Step 4: Execute Maven application to check if it's running properly.
+
+* Step 5: Annotate Java Class
+* Step 6: Develop Java Code to perform database operaiton
+
+
+## Entity Class
+* Definition:
+    * java class that is mapped to a database table
+
+* At minimum, must:
+    * be annotated with `@Entity`
+    * have a public or protected no-argument constructor
+        * The class can have other constructors
+    * Java Basics
+        * If you don't declare any constructor, you get a no-arg constructor for free
+        * Howeve,r if you declare one with argument, then you DO NOT get a no-arg constructor for free
+
+## Annotations
+* Steps
+    * Step 1: Map class to datatbase table
+```java
+@Entity
+@Table(name="student") 
+public class Student {
+    ...
+}
+```
+*
+    * Step 2: Map fields to database columns
+```java
+@Entity
+@Table(name="student") 
+public class Student {
+    // BELOW are NEW code
+    @Id                 // 'primary key'
+    @GeneratedValue(strategy=GenerationType.IDENTITY)   // Generate Strategy
+    @Column(name="id")
+    private int id;
+
+    @Column(name="first-name")
+    private String firstName
+}
+``` 
+
+* ID Generate Strategy
+
+| Name | Description |
+|---|---|
+| GenerationType.AUTO | Pick an appropriate strategy for the particular database |
+| GenerationType.IDENTITY (generally recommended) | Assign primary keys using database identity column |
+| GenerationType.SEQUENCE | Assign primary keys using database sequence |
+| GenerationType.TABLE | Assign primary keys using an underlying database table to ensure uniqueness |
+
+* 
+    * you can create your own CUSTOM generation strategy; create implementing of org.hibernate.id.IdentifierGenerator; override the method: public Serializable generate(..)
+
+* Example Code so far
+```java
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="student")
+public class Student {
+    // define fields
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private int id;
+
+    @Column(name="first_name")
+    private int firstName;
+
+    @Column(name="last_name")
+    private int lastName;
+
+    @Column(name="email")
+    private int email;
+    ...
+}
+```
+
+## Data Access Object (DAO)
+
+* DAO is a common design pattern
+```
+[APP] <--> [student DAO] <--> [JPA EntityManager] <--> [DB]
+```
+
+* Typical methods: save, findByID, findAll, findByLastName, update, delete, deleteAll.etc
+* JPA EntityManager is automatically created by Spring Boot
+
+* We can autowire/inject the JPA Entity Manager into our student DAO
+
+* @transactional
+    * Automatically begin and end transaction for your JPA code
+* @Repository
+    * Spring will automatically register the DAO implementation (thanks to component scanning)
+    * provides translation of any JDBC-related exceptions
+    z`
+
+* Steps
+    * 1. Define DAO interface
+```java
+public interface StudentDAO {
+    void save(Student theStudent);
+}
+```
+*
+    * 2. Define DAO implementation
+        * Inject the entity manager
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+
+@Repository
+public class StudentDAOImpl implements StudentDAO {
+    private EntityManager entityManager;
+
+    @Autowired
+    public StudentDAOImpl(EntityManager theEntityManager) { // Inject the EntityManager
+        entityManager = theEntityManager;
+    }
+
+    @Override
+    @Transactional  // transactional annotation explained earlier
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
+    }
+}
+```
+
+    * 3. Update main app
+
