@@ -145,4 +145,84 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 ## Potential problem with ERROR with PUT request
 * If so, https://www.udemy.com/course/spring-hibernate-tutorial/learn/lecture/42261704#overview
 
+# JDBC Authentication - Plain Text
+* Up to now, we've only hard-coded our user data. 
+* Goal here is to integrate with database
+
+## Database Support in Spring Security
+* Spring Security can read user account info from database
+* By default, you have to follow spring security's predefined table schemas
+
+## Customize Database Access with Spring Security
+* Can also customize the table schemas
+* Useful if you have custom tables specific to your project/custom
+* you will be responsible for developing the code to access the data
+    * JDBC, JPA/Hibernate.etc
+
+## Development Process
+1. Develop SQL Script to set up database tables
+2. Add database support to Maven POM file
+3. Create JDBC properties file
+4. Update Spring Security Configuration to use JDBC
+
+### Default Spring Security Database Schema
+
+<img src="./public//screenshot/5_security/2.png"/>
+
+* "authorities" is same as "roles"
+
+### Step 1: Develop SQL script to setup database tables
+```sql
+CREATE TABLE `users` (
+    `username` varchar(50) NOT NULL,
+    `password` varchar(50) NOT NULL,
+    `enabled` tinyint NOT NULL,
+
+    PRIMARY KEY (`username`)
+) ENGINE=InnoDBB DEFAUTL CHARSET=latin1
+
+CREATE TABLE `authorities` (
+    `username` varchar(50) NOT NULL,
+    `authority` varchar(50) NOT NULL,
+
+    UNIQUE KEY `authorities_idx_1` (`username`, `authority`)
+
+    CONSTRAINT `authorities_ibfk_1`
+    FOREIGN KEY (`username`)
+    REFERENCES `users` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+```
+
+### Step 2: Add Database support to Maven POM file
+* JDBC Driver
+```xml
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+```
+
+### Step 3: create JDBC properties file
+```java
+#
+# JDBC properties
+#
+spring.datasource.url=jdbc:mysql://localhost:3306/employee_directory
+spring.datasource.username=springstudent
+spring.datasource.password=springstudent
+```
+
+### Step 4: Update Spring Security to use JDBC
+```java
+// no longer hard code users, gets user data from database
+@Bean
+public JdbcUserDetailsManager userDetailsManager(DataSource datasource) {
+    return new JdbcUserDetailsManager(datasource);
+}
+```
 
