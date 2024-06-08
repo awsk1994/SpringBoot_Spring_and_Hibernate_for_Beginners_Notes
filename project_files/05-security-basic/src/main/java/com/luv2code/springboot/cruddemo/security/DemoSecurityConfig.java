@@ -15,6 +15,19 @@ public class DemoSecurityConfig {
                 .password("{noop}test123")
                 .roles("EMPLOYEE")
                 .build();
-        return new InMemoryUserDetailsManager(john);
+
+        UserDetails mary = User.builder()
+                .username("Mary")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER")
+                .build();
+
+        UserDetails susan = User.builder()
+                .username("Susan")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(john, mary, susan);
     }
 }
