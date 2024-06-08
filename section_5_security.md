@@ -85,3 +85,64 @@ public class DemoSecurityConfig {
         return new InMemoryUserDetailsManager(john)
     }
 }
+```
+
+# Restrict URLs based on Roles
+
+* General Syntax
+```
+requestMatchers(<< add path to match on >>)
+    .hasRole(<< authorized role >>)
+```
+OR (specify HTTP method)
+```
+requestMatchers(<< add HTTP METHOD to match on >>, << add path to match on >>)
+    .hasRole(<< authorized role >>)
+```
+OR (adding list of roles)
+```
+requestMatchers(<< add HTTP METHOD to match on >>, << add path to match on >>)
+    .hasRole(<< list of authorized role >>)
+```
+
+
+## Cross Site Request Forgery
+
+* Spring Security can protect against CSRF attacks
+* Embded additional authentication data/token to all HTML forms
+* On subsequent requests, web app will verify token before processing
+* Primary use case is traditional web applications (HTML forms.etc)
+
+### When to use CSRF Protection?
+* The Spring Security team recommends:
+    * The CSRF protection for any normal browser web requests
+    * Traditional web apps with HTML forms to add/modify data
+* If you are building a REST API for non-browser clients
+    * you may want to disable CSRF protection
+* In general, not required for stateless REST APIs
+    * that use post, put, delete and/or patch
+
+
+## Code
+```
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(configurer ->
+            configurer
+                    .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                    .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("MANAGER")
+    );
+    // use HTTP Basic Authentication --> since we are overriding the security filter chain, we need to specify what http authentication method we are using.
+    http.httpBasic(Customizer.withDefaults());
+
+    // disable cross site request forgery (CSRF)
+    http.csrf(csrf -> csrf.disable());
+
+    return http.build();
+};
+```
+
+## Potential problem with ERROR with PUT request
+* If so, https://www.udemy.com/course/spring-hibernate-tutorial/learn/lecture/42261704#overview
+
+
