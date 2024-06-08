@@ -13,4 +13,9 @@ public class EmployeeRestController {
         List<String> stringList = new ArrayList<>(Arrays.asList("First element", "Second element"));
         return stringList;
     }
+
+    @GetMapping("/employees/{employeeId}")
+    public String getEmployee(@PathVariable int employeeId) {
+        return employeeId + " element";
+    }
 }
