@@ -226,3 +226,71 @@ public JdbcUserDetailsManager userDetailsManager(DataSource datasource) {
 }
 ```
 
+# BCrypt Encryption
+
+* up to now, we are storing our password in plain text - not ideal for production
+* The best practice is store passwords in an encrypted format
+<img src="./public/screenshot/5_security/3.png"/>
+
+## Spring Security Team Recommendation
+* Spring Security recommends using the popular bcrypt algorithm
+* bcrypt
+    * performs one-way encrypted hashing
+    * adds a **random salt** to the password for additional protection
+    * includes support to defeat brute force attacks
+
+## How to Get a Bcrypt password?
+* You have a plaintext password and you want to encrypt using bcrypt
+* Option 1: Use a website utility to perform the encryption (such as this https://www.bcryptcalculator.com/)
+* Option 2: Write Java Code to perform the encryption
+
+## Development Process
+1. Run SQL Script that contains encrypted passwords
+    * Modify DDL for password field, length should be 68
+
+<img src="./public/screenshot/5_security/5.png"/>
+<img src="./public/screenshot/5_security/6.png"/>
+
+## Password Storage
+* passwords are stored using a specific format:
+<img src="./public/screenshot/5_security/4.png"/>
+
+
+## Spring Security Login Process
+1. Retrieve Password from db for the user
+2. Read the encoding algorithm id (Bcrypt.etc)
+3. For case of bcrypt, encrypt plaintext password from login form (using salt from db password)
+4. Compare encrypted password from login form with encrypted password from db
+5. if there is a match, login successful
+6. if no match, login NOT successful
+
+## Example (after code change)
+<img src="./public/screenshot/5_security/7.png"/>
+
+# Spring Security Custom Tables
+
+* Previously, we mentioned that we have to use a specific table format in the database when storing user info. This is very restrictive, and sometimes we want **custom tables**
+
+## Development Process
+1. Create our custom tables with SQL
+2. Update Spring Security Configuration
+    * Provide Query to find user by username
+    * Provide Query to find authorities/roles by user name
+
+### Step 1: Create our custom tables with SQL
+<img src="./public/screenshot/5_security/8.png"/>
+
+### Step 2: Update Spring Security Configuration
+```java
+@Bean
+public JdbcUserDetailsManager userDetailsManager(DataSource datasource) {
+    JdbcUserDetailsManager manager = new JdbcUserDetailsManager(datasource);
+    manager.setUsersByUsernameQuery("select user_id, pw, active from members where user_id=?");
+    manager.setAuthoritiesByUsernameQuery("select user_id, role from roles where user_id=?");
+    return manager;
+}
+```
+
+## If you have some login issues, try setting `logging.level.org.springframework.security=DEBUG` in applications.yml
+
+
