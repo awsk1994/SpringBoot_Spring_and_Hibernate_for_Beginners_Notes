@@ -218,5 +218,36 @@ public class StudentRestController {
 }
 ```
 
+# Global Exception Handling
+
+## How this works?
+
+<img src="./public/screenshot/4_ioc_springxml/14.png"/>
+
+* Basically, you have an extra layer called `ControllerAdvice` that will handle the exception handling logic before returning to REST client. That way, you don't need to separately define the exception handling logic in each and every controller.
+
+## Development Process
+1. Create new @ControllerAdvice
+2. Refactor REST service.. remove exception handling code
+3. Add exception handling code to @ControllerAdvice
+
+### 1 - Create new @ControllerAdvice
+
+```java
+// file: StudentRestExceptionHandler.java
+@ControllerAdvice
+public class StudentRestExceptionHandler {
+    ...
+}
+```
+
+### 2 - Refactor REST service.. remove exception handling code
+
+<img src="./public/screenshot/4_ioc_springxml/13.png"/>
+
+### 3 - Add exception handling code to @ControllerAdvice
+
+* Literally move what you deleted from step 2, to the `StudentRestExceptionHandler` (from step 1)
+
 
 
