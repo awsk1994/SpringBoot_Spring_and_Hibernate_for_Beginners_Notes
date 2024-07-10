@@ -10,3 +10,6 @@
 - Section 8: Spring MVC Security
 - Section 9: JPA/Hibernate Advanced Mappings
 - Section 10: AOP: Aspect-oriented Programming
+
+
+Watched up to video 121 (REST CRUD APIs section)

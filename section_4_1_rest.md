@@ -248,6 +248,3 @@ public class StudentRestExceptionHandler {
 ### 3 - Add exception handling code to @ControllerAdvice
 
 * Literally move what you deleted from step 2, to the `StudentRestExceptionHandler` (from step 1)
-
-
-
