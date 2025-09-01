@@ -76,3 +76,38 @@ public class instructor {
 }
 ```
 
+## @OneToOne bi-directional mapping
+
+* NO sql changes required
+* In `InstructorDetail` class:
+    1. Add new field to reference `Instructor`
+    2. Add getter/setter method for `Instructor`
+        ```
+        @...
+        public class InstructorDetail {
+            ...
+            private Instructor instructor;
+
+            public Instructor getInstructor() {
+                return this.instructor
+            }
+
+            public void setInstructor(Instructor instructor) {
+                this.instructor = instructor
+            }
+        }
+        ```
+    3. Add `@OneToOne` Annotation
+        ```
+        @...
+        public class InstructorDetail {
+            @OneToOne(mappedBy="instructorDetail", casacade=CascadeType.ALL)
+            private Instructor instructor;
+            ...
+        }
+        ```
+        * `mappedBy` tells Hibernate
+            * Look at the instructorDetail property in the `Instructor` class
+            * Use information from the `Instructor` class @JoinColumn
+
+* To get instructor from instructorDetail: `instructorDetail.getInstructor()`
